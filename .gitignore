@@ -1,0 +1,10 @@
+.DS_STORE
+.idea/description.html
+.idea/inspectionProfiles/
+.idea/misc.xml
+.idea/modules.xml
+.idea/project-template.xml
+.idea/uiDesigner.xml
+.idea/workspace.xml
+PictureLanguage.iml
+out/
