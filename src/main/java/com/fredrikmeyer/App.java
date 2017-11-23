@@ -1,7 +1,6 @@
 package com.fredrikmeyer;
 
 import javax.imageio.ImageIO;
-import javax.imageio.plugins.jpeg.JPEGHuffmanTable;
 import javax.swing.*;
 
 import java.awt.*;
@@ -13,9 +12,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.fredrikmeyer.picturelanguage.*;
-import com.fredrikmeyer.picturelanguage.Frame;
-import com.fredrikmeyer.picturelanguage.Painter;
-import oracle.jvm.hotspot.jfr.JFR;
 
 public class App {
 
