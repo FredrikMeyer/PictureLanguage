@@ -16,16 +16,7 @@ import com.fredrikmeyer.picturelanguage.*;
 public class App {
 
     public static void main(String[] args) throws Exception {
-        File imageFile = new File("./src/resources/moss.png");
-        ArrayList<Segment> segments = new ArrayList<Segment>();
-        //segments = segmentListFromFile(new File("./src/resources/smiley.txt"));
-        //Painter p = new Painter(Frame.IDENTITY,  segments);
-        //Painter p = new Painter(new Frame(Vector.ORIGIN, new Vector(0.5, 0), new Vector(0.5,1)), imageFile);
-        //Painter p = new Painter(Frame.IDENTITY, imageFile);
-        //BufferedImage image = p.getImage();
-
         App gui = new App();
-        System.out.println( System.getProperty("user.dir"));
         gui.go();
     }
 
@@ -55,14 +46,15 @@ public class App {
         return segmentList;
     }
 
-
-    // TODO la painter-klassen returnere et JPanel, som tegnes i hovedklassen
-    // også: lær maven, for nå skjønner jeg ikke stort...
     class DrawPanel extends JPanel {
         private BufferedImage bufferedImage;
 
         public DrawPanel(String filename) {
             loadImageFile(filename);
+        }
+
+        public DrawPanel(BufferedImage bufferedImage) {
+            this.bufferedImage = bufferedImage;
         }
 
         private void loadImageFile(String filename) {

@@ -1,8 +1,8 @@
 package com.fredrikmeyer.picturelanguage;
 
 public class Segment {
-    Vector start;
-    Vector end;
+    private Vector start;
+    private Vector end;
 
     public Segment(Vector start, Vector end) {
         this.start = start;

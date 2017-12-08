@@ -1,6 +1,8 @@
 package com.fredrikmeyer.picturelanguage;
 
 
+import java.util.function.Function;
+
 public class Frame {
     private Vector origin;
     private Vector edge1;
@@ -26,8 +28,12 @@ public class Frame {
         return edge2;
     }
 
+    public Function<Frame, Frame> makeRelativeFrame(Vector origin, Vector firstCorner, Vector secondCorner) {
+        return (f) -> new Frame(coordinateMap(origin), coordinateMap(firstCorner), coordinateMap(secondCorner));
+    }
+
     public Vector coordinateMap(Vector v) {
-        return Vector.add( Vector.scale( v.getXCoordinate(), edge1),
-                Vector.scale( v.getYCoordinate(), edge2));
+        return Vector.add(Vector.scale(v.xCoordinate(), edge1),
+                Vector.scale(v.yCoordinate(), edge2));
     }
 }
