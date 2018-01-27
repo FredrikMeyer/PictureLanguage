@@ -1,4 +1,4 @@
-package com.fredrikmeyer.picturelanguage;
+package picturelanguage;
 
 import java.io.File;
 import java.io.FileNotFoundException;

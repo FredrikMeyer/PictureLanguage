@@ -1,4 +1,4 @@
-package com.fredrikmeyer.picturelanguage;
+package picturelanguage;
 
 public class Vector {
     private double x;

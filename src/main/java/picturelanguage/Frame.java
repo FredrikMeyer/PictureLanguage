@@ -1,4 +1,4 @@
-package com.fredrikmeyer.picturelanguage;
+package picturelanguage;
 
 
 import java.util.function.Function;
