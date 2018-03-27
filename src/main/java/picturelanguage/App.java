@@ -1,11 +1,9 @@
 package picturelanguage;
 
-import picturelanguage.Painter;
-import picturelanguage.Segment;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class App {
 
@@ -19,22 +17,19 @@ public class App {
         //ImagePlus imp2 = IJ.createImage("Tittel", 400, 400, 1, 24);
         //imp2.show();
 
-        List<Segment> segments = Segment.segmentsFromFile(new File("./src/main/java/resources/smiley.txt"));
+        File file = fromResourceFolder("smiley.txt");
+        List<Segment> segments = Segment.segmentsFromFile(file);
         Painter p =  Painter.fromSegments(segments); //fromFile("./src/main/java/resources/moss.png");
-        Painter p2 = Painter.fromFile("./src/main/java/resources/moss.png");
+        Painter p2 = Painter.fromFile(fromResourceFolder("picturelanguage/moss.png"));
         //p2.show();
 
         p.beside(p).show();
 
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        list.add(1);
-        list.add(2);
-        list.add(3);
+    }
 
-        System.out.println(list
-                .stream()
-                .reduce(0, (acc, s) -> acc + s));
-
-
+    private static File fromResourceFolder(String filename) {
+        System.out.println(System.getProperty("user.dir"));
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        return new File(Objects.requireNonNull(classLoader.getResource(filename)).getFile());
     }
 }

@@ -28,8 +28,8 @@ public class Painter {
         this.bufferedImage = bufferedImage;
     }
 
-    public static Painter fromFile(String filename) throws IOException {
-        BufferedImage bufferedImage = ImageIO.read(new File(filename));
+    public static Painter fromFile(File file) throws IOException {
+        BufferedImage bufferedImage = ImageIO.read(file);
         return new Painter(bufferedImage);
     }
 
