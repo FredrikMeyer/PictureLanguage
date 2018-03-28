@@ -34,4 +34,9 @@ public class Vector {
         return new Vector(s * v.xCoordinate(), s * v.yCoordinate());
     }
 
+    @Override
+    public String toString() {
+        return String.format("[%s,%s]", xCoordinate(), yCoordinate());
+    }
+
 }

@@ -13,13 +13,11 @@ public class App {
 
         File file = fileFromResourceFolder("picturelanguage/smiley.txt");
         List<Segment> segments = Segment.segmentsFromFile(file);
-        //Painter p =  Painter.fromSegments(segments); //fromFile("./src/main/java/resources/moss.png");
-        Painter p2 = Painter.fromFile(fileFromResourceFolder("picturelanguage/moss.png"));
-        Painter hFlipped = p2.horizontalFlip();
-        Painter vFlipped = p2.verticalFlip();
+        Painter p2 =  Painter.fromSegments(segments); //fromFile("./src/main/java/resources/moss.png");
 
-        Painter besides = p2.beside(hFlipped);
-        besides.verticalFlip().above(besides).displayImage(":)");
+        p2.beside(p2.verticalFlip())
+                .above(p2.beside(p2.verticalFlip()).horizontalFlip())
+                .displayImage("T");
     }
 
     private static File fileFromResourceFolder(String filename) {

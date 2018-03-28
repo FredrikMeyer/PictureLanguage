@@ -1,13 +1,9 @@
 package picturelanguage;
 
-import ij.IJ;
-import ij.ImagePlus;
-import ij.plugin.Concatenator;
-import ij.process.ImageProcessor;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Line2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
@@ -16,14 +12,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class Painter {
+    private static Logger log = LoggerFactory.getLogger(Painter.class);
     private static final int SIZE = 400;
 
     private BufferedImage bufferedImage;
 
     public Painter(BufferedImage bufferedImage) {
-        this.bufferedImage = bufferedImage;
+        this.bufferedImage = copyImage(bufferedImage);
     }
 
     public static Painter fromFile(File file) throws IOException {
@@ -35,28 +35,33 @@ public class Painter {
         BufferedImage img = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_RGB);
         img.createGraphics();
         Graphics2D g = (Graphics2D) img.getGraphics();
-        g.setColor(new Color(n, n, n));
-        g.fillRect(0, 0, SIZE, SIZE);
+        g.setColor(Color.YELLOW);
+        g.drawString("www.tutorialspoint.com", 20, 20);
+        g.fillRect(0, 0, SIZE / 2, SIZE);
 
-        return new Painter(img);
+        g.dispose();
+
+        return new Painter(copyImage(img));
     }
 
     public static Painter fromSegments(List<Segment> segments) {
-        ImagePlus image = IJ.createImage("Tittel", SIZE, SIZE, 1, 24);
-        ImageProcessor imageProcessor = image.getProcessor();
-        imageProcessor.setColor(Color.WHITE);
-        imageProcessor.fill();
-        imageProcessor.setColor(Color.BLACK);
+        BufferedImage bImage = new BufferedImage(SIZE, SIZE, BufferedImage.TYPE_INT_RGB);
+        bImage.createGraphics();
+        Graphics2D g = (Graphics2D) bImage.getGraphics();
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, SIZE, SIZE);
+        g.setStroke(new BasicStroke(8));
+        g.setColor(Color.BLACK);
 
-        segments.forEach(seg -> {
-            int startX = resizeToFrameSize(seg.getStart().xCoordinate());
-            int startY = 400 - resizeToFrameSize(seg.getStart().yCoordinate());
-            int endX = resizeToFrameSize(seg.getEnd().xCoordinate());
-            int endY = 400 - resizeToFrameSize(seg.getEnd().yCoordinate());
-            imageProcessor.drawLine(startX, startY, endX, endY);
+        segments.forEach(segment -> {
+            Vector start = segment.getStart();
+            Vector end = segment.getEnd();
+            log.info("Drawing vector from {} to {}.", start, end);
+            g.draw(new Line2D.Double(start.xCoordinate() * SIZE, SIZE-start.yCoordinate() * SIZE,
+                    end.xCoordinate() * SIZE, SIZE- end.yCoordinate() * SIZE));
         });
 
-        return null;
+        return new Painter(bImage);
     }
 
     public Painter horizontalFlip() {
@@ -82,8 +87,8 @@ public class Painter {
         int height = bufferedImage.getHeight();
         BufferedImage newImg = new BufferedImage(width, height, bufferedImage.getType());
         Graphics2D g = newImg.createGraphics();
-        g.drawImage(copyImage(bufferedImage), 0, 0, width/2, height, null);
-        g.drawImage(copyImage(otherPainter.getImage()), width/2, 0, width/2, height, null);
+        g.drawImage(copyImage(bufferedImage), 0, 0, width / 2, height, null);
+        g.drawImage(copyImage(otherPainter.getImage()), width / 2, 0, width / 2, height, null);
         return new Painter(newImg);
     }
 
@@ -92,8 +97,8 @@ public class Painter {
         int height = bufferedImage.getHeight();
         BufferedImage newImg = new BufferedImage(width, height, bufferedImage.getType());
         Graphics2D g = newImg.createGraphics();
-        g.drawImage(copyImage(bufferedImage), 0, 0, width, height/2, null);
-        g.drawImage(copyImage(otherPainter.getImage()), 0, height/2, width, height/2, null);
+        g.drawImage(copyImage(bufferedImage), 0, 0, width, height / 2, null);
+        g.drawImage(copyImage(otherPainter.getImage()), 0, height / 2, width, height / 2, null);
         return new Painter(newImg);
     }
 
@@ -102,11 +107,15 @@ public class Painter {
     }
 
     public void displayImage(String title) {
-        JFrame frame = new JFrame(title);
-        frame.setBounds(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
-        frame.setVisible(true);
-        Graphics2D g = (Graphics2D) frame.getRootPane().getGraphics();
-        g.drawImage(bufferedImage, null, 0, 0);
+        JLabel jLabel = new JLabel(new ImageIcon(bufferedImage));
+        JPanel jPanel = new JPanel();
+        jPanel.add(jLabel);
+
+        JFrame f = new JFrame();
+        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        f.setSize(new Dimension(bufferedImage.getWidth(), bufferedImage.getHeight()));
+        f.add(jPanel);
+        f.setVisible(true);
     }
 
     private static int resizeToFrameSize(double number) {

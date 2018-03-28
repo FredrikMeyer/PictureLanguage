@@ -28,6 +28,11 @@
             <artifactId>ij</artifactId>
             <version>1.51h</version>
         </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.13</version>
+        </dependency>
     </dependencies>
 
 </project>
